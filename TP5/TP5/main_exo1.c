@@ -32,7 +32,8 @@ int main() {
 	myTab2 = (int*)malloc(TAB2SIZE * sizeof(int));
 	if (myTab2 != NULL) { initTab(myTab2, tabSize); }
 	else { printf("mémoire insuffisante"); return(-1); }
-	
+	int* MyTab3 = NULL;
+
 	//Test initalisation à 0 
 	printf("\nTest d'initialisation des valeurs 0 de 'myTab2' : \n");
 	for (int i = 0; i < TAB2SIZE; ++i) {
@@ -54,10 +55,10 @@ int main() {
 
 	//Si le nombre d'élément > la capacité du tableau, alors on augmente la capacité du tableau 
 	int nbElts = 100;
-	ajoutElementDansTableau(myTab2, &tabSize, &nbElts, 40);
+	MyTab3 = ajoutElementDansTableau(myTab2, &tabSize, &nbElts, 40);
 	printf("\n");
-	printf("\nTaille du tableau : %d \nNombre d'elements : %d \n", tabSize, nbElts);
+	printf("\nTaille du tableau (taille du tableau initialement a 100) : %d \nNombre d'elements : %d \n", tabSize, nbElts);
 
-	//Destruction de 'myTab2'
-	free(myTab2);
+	//Destruction de 'myTab3'
+	free(MyTab3);
 }

@@ -51,24 +51,23 @@ int* ajoutElementDansTableau(int* tab, int* size, int* nbElts, int element){
 	//si le tableau est déjà rempli, on lui alloue de la mémoire
 	if (*nbElts == *size) {
 		*size += ADDSIZE;
-		int* tmp = tab;
-		tab = (int*)realloc(tab, *size * sizeof(int));
+		int* tmp = (int*)realloc(tab, (*size+ADDSIZE) * sizeof(int));
 
-		if (tab == NULL) {
-			tab = tmp;
+		if (tmp == NULL) {
 			return NULL;
 		}
 
 		else {
+			tab = tmp; 
+			tab[*nbElts] = element;
 			*nbElts += 1;
-			*(tab + *nbElts) = element;
 			return tab;
 		}
 
 	}
 	else {
+		tab[*nbElts] = element;
 		*nbElts += 1;
-		*(tab + *nbElts) = element;
-		return tab;
-	}
+	}	
+	return tab;
 }
