@@ -47,35 +47,39 @@ int setElement(TABLEAU* tab, int pos, int element) {
 	if (tab->elt == NULL || tab->size < 0 || pos < 1)
 		return -1;
 
-	// on vérifie l'existence de pos dans le tableau 
-	if (pos - 1 < tab->size) {
-		*(tab->elt + pos - 1) = element;
-		tab->eltsCount = max(pos, tab->eltsCount);
-		return pos - 1;
+	if (tab->size > (pos - 1)) //Si la position se trouve dans le tableau
+	{
+		tab->elt[pos - 1] = element;
+		tab->eltsCount++;
 	}
 
 	//sinon on utilise la fonction d'incrémentation pour aller jusqu'à la position pos et créer des 0 entre les deux 
-	if (incrementArraySize(tab, pos - tab->size) != -1) {
-		*(tab->elt + tab->size - 1) = element;
-		tab->eltsCount = pos;
-		return pos - 1;
+	else { 
+		incrementArraySize(tab, pos - tab->size); 
+		tab->elt[pos - 1] = element;
+		tab->eltsCount++;
 	}
-	return -1;
+	return pos - 1;
 }
+
 
 int displayElements(TABLEAU* tab, int startPos, int endPos) {
 	if (tab->elt == NULL || startPos < 1 || endPos < 1 || startPos > tab->size || endPos > tab->size)
 		return -1;
 	if (startPos <= endPos) {
 		for (int* i = tab->elt + startPos - 1; i < tab->elt + endPos; ++i) {
-			if ((i % 10 == 0) && (i != 0)) printf("\n");
+			int j = 0;
+			if ((j % 10 == 0) && (j != 0)) printf("\n");
 			printf(" %d ", *i);
+			j++;
 		}
 	}
 	else {
 		for (int* i = tab->elt + startPos - 1; i > tab->elt + endPos - 2; --i) {
-			if ((i % 10 == 0) && (i != 0)) printf("\n");
+			int j = 0;
+			if ((j % 10 == 0) && (j != 0)) printf("\n");
 			printf(" %d ", *i);
+			j++;
 		}
 	}
 	printf("\n");
