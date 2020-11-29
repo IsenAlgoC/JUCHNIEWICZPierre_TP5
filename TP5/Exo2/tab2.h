@@ -8,7 +8,7 @@ typedef struct Tableau {
 	int eltsCount;
 } TABLEAU;
 
-//déclaration de la fonction newArray
+//déclaration de la fonction newArray 
 TABLEAU newArray();
 
 //déclaration de la fonction incrementArraySize
@@ -19,3 +19,6 @@ int setElement(TABLEAU* tab, int pos, int element);
 
 //déclaration de la fonction displayElements
 int displayElements(TABLEAU* tab, int startPos, int endPos);
+
+//déclaration de la fonction deleteElements 
+int deleteElements(TABLEAU* tab, int startPos, int endPos);

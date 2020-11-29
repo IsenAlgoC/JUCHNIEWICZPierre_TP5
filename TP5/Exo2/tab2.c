@@ -17,10 +17,6 @@ TABLEAU newArray() {
 	for (int i = 0; i < TAILLEINITIALE; ++i) {
 		(elt.elt)[i] = 0;
 	}
-	for (int i = 0; i < TAILLEINITIALE; ++i) {
-		if ((i % 10 == 0) && (i != 0)) printf("\n");
-		printf("%d",(elt.elt)[i]);
-	}
 	return elt;
 }
 
@@ -68,5 +64,53 @@ int setElement(TABLEAU* tab, int pos, int element) {
 }
 
 int displayElements(TABLEAU* tab, int startPos, int endPos) {
+	if (tab->elt == NULL || startPos < 1 || endPos < 1 || startPos > tab->size || endPos > tab->size)
+		return -1;
+	if (startPos <= endPos) {
+		for (int* i = tab->elt + startPos - 1; i < tab->elt + endPos; ++i) {
+			if ((i % 10 == 0) && (i != 0)) printf("\n");
+			printf(" %d ", *i);
+		}
+	}
+	else {
+		for (int* i = tab->elt + startPos - 1; i > tab->elt + endPos - 2; --i) {
+			if ((i % 10 == 0) && (i != 0)) printf("\n");
+			printf(" %d ", *i);
+		}
+	}
+	printf("\n");
+	return 0;
+}
 
+int deleteElements(TABLEAU* tab, int startPos, int endPos) {
+	if (tab->elt == NULL || startPos < 1 || endPos < 1 || startPos > tab->size || endPos > tab->size)
+		return -1;
+	if (endPos < startPos) {
+		int tmp = endPos;
+		endPos = startPos;
+		startPos = tmp;
+	}
+	int nbDeValDansIntervalle = endPos - startPos + 1;
+	/* Liberation de la memoire si tous les elements du tableau sont selectionnees */
+	if (nbDeValDansIntervalle == tab->size) {
+		free(tab->elt);
+		tab->elt = NULL;
+		tab->size = 0;
+		tab->eltsCount = 0;
+		return tab->size;
+	}
+	/* Decalage vers la gauche des valeurs positionnees situees apres la partie a supprimer
+	pour qu'elles commencent a startPos. */
+	for (int i = startPos - 1; i < tab->size - endPos; i++) {
+		tab->elt[i] = tab->elt[i + nbDeValDansIntervalle];
+	}
+	/* Reduction de la memoire au minimum necessaire */
+	int* buffer = tab->elt;
+	tab->elt = (int*)realloc(tab->elt, ((size_t)tab->size - (size_t)nbDeValDansIntervalle) * sizeof(int));
+	if (tab->elt == NULL) { tab->elt = buffer; return -1; }
+	/* Mise a jour de la taille et du nombre d'elements */
+	tab->size -= nbDeValDansIntervalle;
+	if (startPos <= tab->eltsCount)
+		tab->eltsCount -= (endPos <= tab->eltsCount) ? nbDeValDansIntervalle : (tab->eltsCount - startPos + 1);
+	return tab->size;
 }
