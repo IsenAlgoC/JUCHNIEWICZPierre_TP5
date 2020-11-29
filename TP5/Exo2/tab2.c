@@ -62,7 +62,8 @@ int setElement(TABLEAU* tab, int pos, int element) {
 	return pos - 1;
 }
 
-
+// renvoie -1 si erreur, sinon 0
+// startPos >= EndPos n’est pas un cas d’erreur et doit être traité.
 int displayElements(TABLEAU* tab, int startPos, int endPos) {
 	if (tab->elt == NULL || startPos < 1 || endPos < 1 || startPos > tab->size || endPos > tab->size)
 		return -1;
@@ -86,35 +87,46 @@ int displayElements(TABLEAU* tab, int startPos, int endPos) {
 	return 0;
 }
 
+
+
+// renvoie -1 si erreur, sinon la nouvelle taille du tableau
+// startPos >= EndPos n’est pas un cas d’erreur et doit être traité.
 int deleteElements(TABLEAU* tab, int startPos, int endPos) {
-	if (tab->elt == NULL || startPos < 1 || endPos < 1 || startPos > tab->size || endPos > tab->size)
+	if (tab->elt == NULL || startPos < 1 || endPos < 1 || startPos > tab->size || endPos > tab->size)	//on vérifie les erreurs possibles
 		return -1;
-	if (endPos < startPos) {
+
+
+	if (endPos < startPos) {	//si endPos<startpos, alors on inverse les deux 
 		int tmp = endPos;
 		endPos = startPos;
 		startPos = tmp;
 	}
-	int nbDeValDansIntervalle = endPos - startPos + 1;
-	/* Liberation de la memoire si tous les elements du tableau sont selectionnees */
-	if (nbDeValDansIntervalle == tab->size) {
-		free(tab->elt);
+
+
+	int nb = endPos - startPos + 1;	//nommbre entre les deux positions choisies
+	if (nb == tab->size) {	//si le nombre de valeurs à détruire fait la taille du tableau
+		free(tab->elt);		//on détruit le tableau
 		tab->elt = NULL;
 		tab->size = 0;
 		tab->eltsCount = 0;
 		return tab->size;
 	}
-	/* Decalage vers la gauche des valeurs positionnees situees apres la partie a supprimer
-	pour qu'elles commencent a startPos. */
+	
 	for (int i = startPos - 1; i < tab->size - endPos; i++) {
-		tab->elt[i] = tab->elt[i + nbDeValDansIntervalle];
+		tab->elt[i] = tab->elt[i + nb];							//on décale vers la gauche du nombre d'élément supprimé 
 	}
-	/* Reduction de la memoire au minimum necessaire */
-	int* buffer = tab->elt;
-	tab->elt = (int*)realloc(tab->elt, ((size_t)tab->size - (size_t)nbDeValDansIntervalle) * sizeof(int));
-	if (tab->elt == NULL) { tab->elt = buffer; return -1; }
-	/* Mise a jour de la taille et du nombre d'elements */
-	tab->size -= nbDeValDansIntervalle;
+
+
+	//destruction de la mémoire plus utilisée
+	int* save = tab->elt;
+	tab->elt = (int*)realloc(tab->elt, ((size_t)tab->size - (size_t)nb) * sizeof(int));
+	if (tab->elt == NULL){
+		tab->elt = save; 
+		return -1; 
+	}
+	
+	tab->size -= nb;
 	if (startPos <= tab->eltsCount)
-		tab->eltsCount -= (endPos <= tab->eltsCount) ? nbDeValDansIntervalle : (tab->eltsCount - startPos + 1);
+		tab->eltsCount -= (endPos <= tab->eltsCount) ? nb : (tab->eltsCount - startPos + 1);
 	return tab->size;
 }
