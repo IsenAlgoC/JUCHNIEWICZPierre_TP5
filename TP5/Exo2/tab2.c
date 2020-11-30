@@ -24,11 +24,11 @@ TABLEAU newArray() {
 //renvoie -1 si erreur || renvoie nouvelle taille si OK 
 int incrementArraySize(TABLEAU* tab, int incrementValue) {
 	int* tmp = tab->elt;
-	if (tab->size < 0 || tab->elt == NULL || incrementValue < 1) {
+	if (tab->size < 0 || tab->elt == NULL || incrementValue < 1) {		//return -1 dans tous les cas d'erreurs possible
 		return -1;
 	}
 
-	tab->elt = (int*)realloc(tab->elt, ((size_t)tab->size + (size_t)incrementValue) * sizeof(int));
+	tab->elt = (int*)realloc(tab->elt, ((size_t)tab->size + (size_t)incrementValue) * sizeof(int));	//on alloue de la mémoire
 	if (tab->elt == NULL){
 		tab->elt = tmp; 
 		return -1; 
@@ -36,15 +36,14 @@ int incrementArraySize(TABLEAU* tab, int incrementValue) {
 
 	tab->size += incrementValue;
 	for (int i = 0; i < incrementValue; i++) {
-		*(tab->elt + tab->size - 1 - i) = 0;
+		*(tab->elt + tab->size - 1 - i) = 0;	//on rajoute des 0 entre la dernière ancienne valeur et la nouvelle position de la valeur 
 	}
 	return tab->size;	//renvoie nouvelle taille 
 	
 }
 
 int setElement(TABLEAU* tab, int pos, int element) {
-	//renvoie -1 en cas d'erreur
-	if (tab->elt == NULL || tab->size < 0 || pos < 1)
+	if (tab->elt == NULL || tab->size < 0 || pos < 1)		//renvoie -1 en cas d'erreur
 		return -1;
 
 	if (tab->size > (pos - 1)) //Si la position se trouve dans le tableau
@@ -65,23 +64,14 @@ int setElement(TABLEAU* tab, int pos, int element) {
 // renvoie -1 si erreur, sinon 0
 // startPos >= EndPos n’est pas un cas d’erreur et doit être traité.
 int displayElements(TABLEAU* tab, int startPos, int endPos) {
-	if (tab->elt == NULL || startPos < 1 || endPos < 1 || startPos > tab->size || endPos > tab->size)
+	if (tab->elt == NULL || startPos < 1 || endPos < 1 || startPos > tab->size || endPos > tab->size) //return -1 dans tous les cas d'erreurs possible
 		return -1;
-	if (startPos <= endPos) {
-		for (int* i = tab->elt + startPos - 1; i < tab->elt + endPos; ++i) {
-			int j = 0;
-			if ((j % 10 == 0) && (j != 0)) printf("\n");
-			printf(" %d ", *i);
-			j++;
-		}
-	}
-	else {
-		for (int* i = tab->elt + startPos - 1; i > tab->elt + endPos - 2; --i) {
-			int j = 0;
-			if ((j % 10 == 0) && (j != 0)) printf("\n");
-			printf(" %d ", *i);
-			j++;
-		}
+
+	if (startPos >= endPos){	//si le start est plus grand que le end, on inverse les deux 
+		int temp = endPos; endPos = startPos; startPos = temp; 
+	} 
+	for (int i = startPos; i <= endPos; i++){	//affichage des valeurs entre startpos et endpos
+		printf("%d ", tab->elt[i - 1]); 
 	}
 	printf("\n");
 	return 0;
@@ -113,7 +103,7 @@ int deleteElements(TABLEAU* tab, int startPos, int endPos) {
 	}
 	
 	for (int i = startPos - 1; i < tab->size - endPos; i++) {
-		tab->elt[i] = tab->elt[i + nb];							//on décale vers la gauche du nombre d'élément supprimé 
+		tab->elt[i] = tab->elt[i + nb];							//on décale vers la gauche du nombre d'élément supprimmé 
 	}
 
 

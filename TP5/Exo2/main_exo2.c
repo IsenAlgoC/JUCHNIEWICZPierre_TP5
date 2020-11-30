@@ -4,12 +4,13 @@
 
 
 int main() {
+	//test des fonctions 
 	printf("Initialisation du tableau de %d + 19 [0] + 1 [15] a la place '120' = 120 elements par setElement : \n", TAILLEINITIALE);
 	printf("\n");
 	TABLEAU tab = newArray();
-	setElement(&tab, 15, 120);
-	setElement(&tab, 120, 15);
-	for (int i = 0; i < TAILLEINITIALE+20; ++i) {
+	setElement(&tab, 15, 120);	//ajout d'un élément '120' à la 15ème place
+	setElement(&tab, 120, 15);	//ajout d'un élément '15' à la 120ème place = 20 places en +
+	for (int i = 0; i < TAILLEINITIALE+20; ++i) {	//on affiche le tableau initié avec des 0 et les éléments ajouté avec 'setElement' 
 		if ((i % 10 == 0) && (i != 0)) printf("\n");
 		printf("| %d  ", (tab.elt)[i]);
 	}
@@ -39,7 +40,7 @@ int main() {
 	printf("\n\nEn retirant les 20 premiers elements du tableau : \n");;
 	deleteElements(&tab, 1, 20);
 	printf("tab.size = %d\n", tab.size);
-	for (int i = 0; i < TAILLEINITIALE+tailleajout; ++i) {
+	for (int i = 0; i < TAILLEINITIALE+tailleajout; ++i) {	//on affiche le tableau final 
 		if ((i % 10 == 0) && (i != 0)) printf("\n");
 		printf("| %d  ", (tab.elt)[i]);
 	}
